@@ -25,7 +25,7 @@ class workers_analysis():
         for human in replay.humans:
             for frame in range(0, total_frames):
                 workers = workers_at_frame(human, frame)
-                if workers > 40:
+                if workers >= 40:
                     human.worker_milestones["40"] = frame
                     break
 

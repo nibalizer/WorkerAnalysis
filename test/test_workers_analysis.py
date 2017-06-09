@@ -101,7 +101,7 @@ def test_worker_milestones():
         nerchio = replay.players[0]
         neeb = replay.players[1]
 
-    assert neeb.worker_milestones["40"] == time_to_frame('4:06')
+    assert neeb.worker_milestones["40"] == 5493
     assert nerchio.worker_milestones["40"] == time_to_frame('4:31')
 
     assert neeb.worker_milestones["50"] == time_to_frame('5:34')
