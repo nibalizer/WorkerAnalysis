@@ -4,28 +4,6 @@ from sc2reader.engine.plugins import SelectionTracker, GameHeartNormalizer
 from workers_analysis import *
 
 
-def do_thing():
-
-    replay = sc2reader.load_replay(
-        'replays/Neeb vs Nerchio PvZ  Honorgrounds LE WCS Austin.SC2Replay',
-        engine=sc2reader.engine.GameEngine(plugins=[
-            APMTracker(),
-            SelectionTracker(),
-            ContextLoader(),
-            GameHeartNormalizer(),
-            workers_analysis(),
-        ])
-    )
-    assert(replay.player[1].at_40_workers_frame == -1)
-    assert(replay.player[2].at_40_workers_frame == 5760)
-    assert(replay.player[1].at_50_workers_frame == -1)
-    assert(replay.player[2].at_50_workers_frame == -1)
-    assert(replay.player[1].at_60_workers_frame == -1)
-    assert(replay.player[2].at_60_workers_frame == -1)
-    assert(replay.player[1].at_70_workers_frame == -1)
-    assert(replay.player[2].at_70_workers_frame == -1)
-
-
 def test_frame_to_time():
     assert frame_to_time(0) == '0:00'
     assert frame_to_time(1) == '0:00'
@@ -70,11 +48,11 @@ def test_alive_at_this_time():
 
     probe = neeb.units[54]
 
-    assert alive_at_this_time(probe, 0, replay.frames) == False
-    assert alive_at_this_time(probe, 28870, replay.frames) == False
-    assert alive_at_this_time(probe, 26000, replay.frames) == False
-    assert alive_at_this_time(probe, 4500, replay.frames) == True
-    assert alive_at_this_time(probe, 2000, replay.frames) == False
+    assert alive_at_this_time(probe, 0, replay.frames) is False
+    assert alive_at_this_time(probe, 28870, replay.frames) is False
+    assert alive_at_this_time(probe, 26000, replay.frames) is False
+    assert alive_at_this_time(probe, 4500, replay.frames) is True
+    assert alive_at_this_time(probe, 2000, replay.frames) is False
 
 
 def test_workers_at_frame():

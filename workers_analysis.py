@@ -17,13 +17,7 @@ class workers_analysis():
 
     def handlePlayerStatsEvent(self, event, replay):
         #print(event.player, event.frame, event.workers_active_count, frame_to_time(event.frame))
-        workers = 0
-        #for unit in event.player.units:
-        #    if unit.is_worker and alive_at_this_time(unit, event.frame, replay):
-        #        print(unit.died_at)
-        #        workers += 1
-        #print("Workers: ",  workers)
-        #event.workers_active_count = workers
+        pass
 
 def frame_to_time(frame):
     # This forces everything up to the next second into
@@ -61,10 +55,6 @@ def alive_at_this_time(unit, time, frames):
     else:
         return False
 
-def frames_at_workers_count(player, count):
-    for index in range(len(times)):
-        if player.workers_data[index] > count:
-            return(times[index])
 
 def workers_at_frame(player, frame):
     workers = 0
@@ -74,59 +64,9 @@ def workers_at_frame(player, frame):
             if alive_at_this_time(unit, frame, player.total_replay_frames):
                 workers += 1
                 workers_array.append(unit)
-    #from pdb import set_trace; set_trace()
     return workers
 
 
 if __name__ == "__main__":
 
-    replay = sc2reader.load_replay(
-        'thereplay.SC2Replay',
-        engine=sc2reader.engine.GameEngine(plugins=[
-            ContextLoader(),
-            APMTracker(),
-            SelectionTracker(),
-            GameHeartNormalizer(),
-            workers_analysis(),
-        ])
-    )
-
-    # All done in frames
-    game_end = replay.frames
-    game_start = 0
-    times = range(game_start, game_end, 160)
-    replay.times = times
-
-#    for player in replay.players:
-#        workers = []
-#        worker_count = 0
-#        for current_frame in range(game_start, game_end, 160):
-#            current_workers = 0
-#            # Scan all units owned by player
-#            workers_at_time = []
-#            for unit in player.units:
-#                if unit.is_worker and alive_at_this_time(unit, current_frame, replay):
-#                    #print(unit)
-#                    #print(unit.died_at)
-#                    current_workers += unit.supply
-#                    workers_at_time.append(unit)
-#            workers.append(current_workers)
-#            if current_workers >= 40 and player.name == "Neeb":
-#                from pdb import set_trace; set_trace()
-#        player.workers_data = workers
-
-#    print(replay.map_name)
-#    print(replay.frames /16. /60.)
-#    print(40)
-#    print(replay.players[1].name)
-#    print(frames_at_workers_count(replay.players[1], 40)/ 16)
-#    print(frame_to_time(frames_at_workers_count(replay.players[1], 40)))
-#    print(40)
-#    print(replay.players[0].name)
-#    print(frames_at_workers_count(replay.players[0], 40)/ 16)
-#    print(frame_to_time(frames_at_workers_count(replay.players[0], 40)))
-#    workers_at_frame(replay.players[0], 9500)
-
-    #evs = [i for i in replay.events if i.name == "PlayerStatsEvent"]
-    #for e in evs:
-    #    print(e.player, e.frame, e.workers)
+    pass
