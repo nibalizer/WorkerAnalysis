@@ -82,3 +82,34 @@ def test_workers_at_frame():
     assert workers_at_frame(neeb, time_to_frame('10:56')) == 70
     assert workers_at_frame(nerchio, time_to_frame('12:22')) == 58
     assert workers_at_frame(nerchio, time_to_frame('12:23')) == 61
+
+def test_worker_milestones():
+    replay = sc2reader.load_replay(
+        'replays/Nerchio vs Neeb ZvP  Newkirk Precinct TE (Void) WCS Austin.SC2Replay',
+        engine=sc2reader.engine.GameEngine(plugins=[
+            APMTracker(),
+            SelectionTracker(),
+            ContextLoader(),
+            GameHeartNormalizer(),
+            workers_analysis(),
+        ])
+    )
+    if replay.players[0].name == "Neeb":
+        neeb = replay.players[0]
+        nerchio = replay.players[1]
+    else:
+        nerchio = replay.players[0]
+        neeb = replay.players[1]
+
+    assert neeb.worker_milestones["40"] == time_to_frame('4:06')
+    assert nerchio.worker_milestones["40"] == time_to_frame('4:31')
+
+    assert neeb.worker_milestones["50"] == time_to_frame('5:34')
+    assert nerchio.worker_milestones["50"] == time_to_frame('5:25')
+
+    assert neeb.worker_milestones["60"] == time_to_frame('6:28')
+    assert nerchio.worker_milestones["60"] == time_to_frame('12:22')
+
+    assert neeb.worker_milestones["70"] == time_to_frame('10:56')
+    assert nerchio.worker_milestones["70"] is None
+

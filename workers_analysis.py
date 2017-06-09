@@ -9,15 +9,27 @@ class workers_analysis():
 
     def handleInitGame(self, event, replay):
         for human in replay.humans:
-            human.at_40_workers_frame = -1
-            human.at_50_workers_frame = -1
-            human.at_60_workers_frame = -1
-            human.at_70_workers_frame = -1
             human.total_replay_frames = replay.frames
+            human.worker_milestones = {
+                "40": None,
+                "50": None,
+                "60": None,
+                "70": None,
+            }
 
     def handlePlayerStatsEvent(self, event, replay):
-        #print(event.player, event.frame, event.workers_active_count, frame_to_time(event.frame))
         pass
+
+    def handleEndGame(self, event, replay):
+        total_frames = replay.frames
+        for human in replay.humans:
+            for frame in range(0, total_frames):
+                workers = workers_at_frame(human, frame)
+                if workers > 40:
+                    human.worker_milestones["40"] = frame
+                    break
+
+
 
 def frame_to_time(frame):
     # This forces everything up to the next second into
@@ -69,4 +81,13 @@ def workers_at_frame(player, frame):
 
 if __name__ == "__main__":
 
-    pass
+    replay = sc2reader.load_replay(
+        'thereplay.SC2Replay',
+        engine=sc2reader.engine.GameEngine(plugins=[
+            APMTracker(),
+            SelectionTracker(),
+            ContextLoader(),
+            GameHeartNormalizer(),
+            workers_analysis(),
+        ])
+    )
