@@ -65,10 +65,38 @@ def test_time_to_frame():
     assert time_to_frame('3:06') == 2976
 
 
-def frame_to_time(frame):
-    # note for future python3 work
-    game_seconds = int(frame / 16)
 
-    minutes = int(game_seconds / 60)
-    seconds = game_seconds - (60 * minutes)
-    return '{0}:{1:02d}'.format(minutes, seconds)
+def test_workers_at_frame():
+
+    replay = sc2reader.load_replay(
+        'replays/Nerchio vs Neeb ZvP  Newkirk Precinct TE (Void) WCS Austin.SC2Replay',
+        engine=sc2reader.engine.GameEngine(plugins=[
+            APMTracker(),
+            SelectionTracker(),
+            ContextLoader(),
+            GameHeartNormalizer(),
+            workers_analysis(),
+        ])
+    )
+    if replay.players[0].name == "Neeb":
+        neeb_pid = 0
+        nerchio_pid = 1
+    else:
+        nerchio_pid = 0
+        neeb_pid = 1
+
+    assert workers_at_frame(replay.players[neeb_pid], time_to_frame('4:06')) == 40
+    assert workers_at_frame(replay.players[nerchio_pid], time_to_frame('4:32')) == 40
+    assert workers_at_frame(replay.players[nerchio_pid], time_to_frame('5:26')) == 50
+    assert workers_at_frame(replay.players[neeb_pid], time_to_frame('5:34')) == 50
+    assert workers_at_frame(replay.players[neeb_pid], time_to_frame('6:28')) == 60
+    assert workers_at_frame(replay.players[neeb_pid], time_to_frame('10:56')) == 70
+    assert workers_at_frame(replay.players[nerchio_pid], time_to_frame('12:23')) == 60
+
+    #assert(nerchio, at 4:32, 40 workers)
+    #assert(nerchio, at 5:26, 50 workers)
+    #assert(neeb, at 5:34, 50 workers)
+    #assert(neeb, at 6:28, 60 workers)
+    #assert(neeb, at 10:56, 70 workers)
+    #assert(nerchio, at 12:23, 60 workers)
+

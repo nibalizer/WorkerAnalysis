@@ -13,9 +13,10 @@ class workers_analysis():
             human.at_50_workers_frame = -1
             human.at_60_workers_frame = -1
             human.at_70_workers_frame = -1
+            human.total_replay_frames = replay.frames
 
     def handlePlayerStatsEvent(self, event, replay):
-        print(event.player, event.frame, event.workers_active_count, frame_to_time(event.frame))
+        #print(event.player, event.frame, event.workers_active_count, frame_to_time(event.frame))
         workers = 0
         #for unit in event.player.units:
         #    if unit.is_worker and alive_at_this_time(unit, event.frame, replay):
@@ -41,9 +42,9 @@ def time_to_frame(time):
     return frames
 
 
-def alive_at_this_time(unit, time, replay):
+def alive_at_this_time(unit, time, frames):
     if unit.died_at is None:
-        unit.died_at = replay.frames
+        unit.died_at = frames
     if time >= unit.finished_at and time <= unit.died_at:
         return True
     else:
@@ -55,7 +56,15 @@ def frames_at_workers_count(player, count):
             return(times[index])
 
 def workers_at_frame(player, frame):
-    pass
+    workers = 0
+    workers_array = []
+    for unit in player.units:
+        if unit.is_worker:
+            if alive_at_this_time(unit, frame, player.total_replay_frames):
+                workers += 1
+                workers_array.append(unit)
+    return workers
+
 
 if __name__ == "__main__":
 
@@ -76,34 +85,35 @@ if __name__ == "__main__":
     times = range(game_start, game_end, 160)
     replay.times = times
 
-    for player in replay.players:
-        workers = []
-        worker_count = 0
-        for current_frame in range(game_start, game_end, 160):
-            current_workers = 0
-            # Scan all units owned by player
-            workers_at_time = []
-            for unit in player.units:
-                if unit.is_worker and alive_at_this_time(unit, current_frame, replay):
-                    #print(unit)
-                    #print(unit.died_at)
-                    current_workers += unit.supply
-                    workers_at_time.append(unit)
-            workers.append(current_workers)
-            if current_workers >= 40 and player.name == "Neeb":
-                from pdb import set_trace; set_trace()
-        player.workers_data = workers
+#    for player in replay.players:
+#        workers = []
+#        worker_count = 0
+#        for current_frame in range(game_start, game_end, 160):
+#            current_workers = 0
+#            # Scan all units owned by player
+#            workers_at_time = []
+#            for unit in player.units:
+#                if unit.is_worker and alive_at_this_time(unit, current_frame, replay):
+#                    #print(unit)
+#                    #print(unit.died_at)
+#                    current_workers += unit.supply
+#                    workers_at_time.append(unit)
+#            workers.append(current_workers)
+#            if current_workers >= 40 and player.name == "Neeb":
+#                from pdb import set_trace; set_trace()
+#        player.workers_data = workers
 
-    print(replay.map_name)
-    print(replay.frames /16. /60.)
-    print(40)
-    print(replay.players[1].name)
-    print(frames_at_workers_count(replay.players[1], 40)/ 16)
-    print(frame_to_time(frames_at_workers_count(replay.players[1], 40)))
-    print(40)
-    print(replay.players[0].name)
-    print(frames_at_workers_count(replay.players[0], 40)/ 16)
-    print(frame_to_time(frames_at_workers_count(replay.players[0], 40)))
+#    print(replay.map_name)
+#    print(replay.frames /16. /60.)
+#    print(40)
+#    print(replay.players[1].name)
+#    print(frames_at_workers_count(replay.players[1], 40)/ 16)
+#    print(frame_to_time(frames_at_workers_count(replay.players[1], 40)))
+#    print(40)
+#    print(replay.players[0].name)
+#    print(frames_at_workers_count(replay.players[0], 40)/ 16)
+#    print(frame_to_time(frames_at_workers_count(replay.players[0], 40)))
+#    workers_at_frame(replay.players[0], 9500)
 
     #evs = [i for i in replay.events if i.name == "PlayerStatsEvent"]
     #for e in evs:
