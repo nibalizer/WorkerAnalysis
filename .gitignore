@@ -1,1 +1,3 @@
 *.swp
+*.cache
+test/__pycache__
