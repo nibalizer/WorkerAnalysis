@@ -26,19 +26,30 @@ class workers_analysis():
         #event.workers_active_count = workers
 
 def frame_to_time(frame):
-    # note for future python3 work
-    game_seconds = int(frame / 16)
+    # This forces everything up to the next second into
+    # the previous second
+    # ex
+    # frame 0 : 0:00
+    # frame 1 - 22: 0:01
+    # frame 23 - 45: 0:02
+    game_seconds = int(frame / 22.4)
 
     minutes = int(game_seconds / 60)
     seconds = game_seconds - (60 * minutes)
     return '{0}:{1:02d}'.format(minutes, seconds)
 
 def time_to_frame(time):
+    # This always returns the bottom frame so there will be frames
+    # that can never be accessed with this function
+    # ex:
+    # time 0:01: frame 22
+    # time 0:02: frame 44
+    # time 0:03: frame 67
     if ':' not in time:
         raise SyntaxError("Must be a MM:SS formatted time string")
     minutes, seconds = map(int, time.split(":"))
     total_seconds = minutes * 60 + seconds
-    frames = total_seconds * 16
+    frames = int(total_seconds * 22.4)
     return frames
 
 
@@ -63,6 +74,7 @@ def workers_at_frame(player, frame):
             if alive_at_this_time(unit, frame, player.total_replay_frames):
                 workers += 1
                 workers_array.append(unit)
+    #from pdb import set_trace; set_trace()
     return workers
 
 
