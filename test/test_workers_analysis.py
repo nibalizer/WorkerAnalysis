@@ -101,15 +101,15 @@ def test_worker_milestones():
         nerchio = replay.players[0]
         neeb = replay.players[1]
 
-    assert neeb.worker_milestones["40"] == 5493
-    assert nerchio.worker_milestones["40"] == time_to_frame('4:31')
+    assert neeb.worker_milestones[40] == 5493
+    assert nerchio.worker_milestones[40] == 5213
 
-    assert neeb.worker_milestones["50"] == time_to_frame('5:34')
-    assert nerchio.worker_milestones["50"] == time_to_frame('5:25')
+    assert neeb.worker_milestones[50] == 7466
+    assert nerchio.worker_milestones[50] == 7247
 
-    assert neeb.worker_milestones["60"] == time_to_frame('6:28')
-    assert nerchio.worker_milestones["60"] == time_to_frame('12:22')
+    assert neeb.worker_milestones[60] == 8668
+    assert nerchio.worker_milestones[60] == 11838
 
-    assert neeb.worker_milestones["70"] == time_to_frame('10:56')
-    assert nerchio.worker_milestones["70"] is None
+    assert neeb.worker_milestones[70] == 14631
+    assert nerchio.worker_milestones[70] is 17087
 

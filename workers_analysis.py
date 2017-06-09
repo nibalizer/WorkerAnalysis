@@ -10,24 +10,25 @@ class workers_analysis():
     def handleInitGame(self, event, replay):
         for human in replay.humans:
             human.total_replay_frames = replay.frames
+            # For zerg these are a bit funky around buildings
+            # we count the drone in here until the building is completely finished
+            # This is an obvious place to work to improve
             human.worker_milestones = {
-                "40": None,
-                "50": None,
-                "60": None,
-                "70": None,
+                40: None,
+                50: None,
+                60: None,
+                70: None,
             }
-
-    def handlePlayerStatsEvent(self, event, replay):
-        pass
 
     def handleEndGame(self, event, replay):
         total_frames = replay.frames
         for human in replay.humans:
-            for frame in range(0, total_frames):
-                workers = workers_at_frame(human, frame)
-                if workers >= 40:
-                    human.worker_milestones["40"] = frame
-                    break
+            for milestone in [40, 50, 60, 70]:
+                for frame in range(0, total_frames):
+                    workers = workers_at_frame(human, frame)
+                    if workers >= milestone:
+                        human.worker_milestones[milestone] = frame
+                        break
 
 
 
