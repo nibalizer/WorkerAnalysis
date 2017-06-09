@@ -111,5 +111,5 @@ def test_worker_milestones():
     assert nerchio.worker_milestones[60] == 11838
 
     assert neeb.worker_milestones[70] == 14631
-    assert nerchio.worker_milestones[70] is 17087
+    assert nerchio.worker_milestones[70] == 17087
 
