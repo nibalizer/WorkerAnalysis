@@ -37,7 +37,8 @@ def test_alive_at_this_time():
             ContextLoader(),
             GameHeartNormalizer(),
             workers_analysis(),
-        ])
+        ]),
+        load_map=False
     )
     if replay.players[0].name == "Neeb":
         neeb = replay.players[0]
@@ -65,7 +66,8 @@ def test_workers_at_frame():
             ContextLoader(),
             GameHeartNormalizer(),
             workers_analysis(),
-        ])
+        ]),
+        load_map=False
     )
     if replay.players[0].name == "Neeb":
         neeb = replay.players[0]
@@ -92,7 +94,8 @@ def test_worker_milestones():
             ContextLoader(),
             GameHeartNormalizer(),
             workers_analysis(),
-        ])
+        ]),
+        load_map=False
     )
     if replay.players[0].name == "Neeb":
         neeb = replay.players[0]
