@@ -1,3 +1,4 @@
 *.swp
 *.cache
 test/__pycache__
+thereplay.SC2Replay
